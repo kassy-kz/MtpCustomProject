@@ -1,0 +1,44 @@
+# A simple test for the minimal standard C++ library
+#
+
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := libmtpjnicustom
+
+LOCAL_SRC_FILES := \
+    jni_custom/android_mtp_MtpDatabase.cpp \
+    jni_custom/android_mtp_MtpDevice.cpp \
+
+LOCAL_C_INCLUDES := \
+                    /home/kashimoto/jcrom_work/system/core/include/ \
+                    /home/kashimoto/jcrom_work/frameworks/native/include/ \
+                    /home/kashimoto/jcrom_work/frameworks/native/include/ \
+                    /home/kashimoto/jcrom_work/bionic/libc/kernel/common/ \
+                    /home/kashimoto/jcrom_work/external/jhead \
+                    /home/kashimoto/jcrom_work/libnativehelper/include/ \
+                    /home/kashimoto/jcrom_work/libnativehelper/include/nativehelper \
+                    /home/kashimoto/jcrom_work/frameworks/base/include/ \
+                    $(LOCAL_PATH)/../mtp_custom/ \
+                    $(LOCAL_PATH)/mtp_custom/ \
+
+LOCAL_C_INCLUDES += $(call include-path-for, system-core)/cutils
+
+LOCAL_CFLAGS += -DHAVE_PTHREADS
+
+#LOCAL_STATIC_LIBRARIES := libmtpcustom
+
+
+LOCAL_LDLIBS := -ldl -lGLESv1_CM -llog -lc \
+ $(LOCAL_PATH)/Android/libutils.so \
+ $(LOCAL_PATH)/Android/libcutils.so \
+ $(LOCAL_PATH)/external/lib/libusbhost.so  \
+ $(LOCAL_PATH)/external/lib/libexif.so \
+$(LOCAL_PATH)/external/lib/libnativehelper.so \
+$(LOCAL_PATH)/external/lib/libandroid_runtime.so \
+ $(LOCAL_PATH)/../obj/local/armeabi/libmtpcustom.so \
+
+include $(BUILD_SHARED_LIBRARY)
+
+#include $(BUILD_EXECUTABLE)

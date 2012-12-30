@@ -1,0 +1,43 @@
+LOCAL_PATH:= $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:=                                       \
+                  mtp_custom/MtpDataPacket.cpp          \
+                  mtp_custom/MtpDebug.cpp               \
+                  mtp_custom/MtpDevice.cpp              \
+                  mtp_custom/MtpEventPacket.cpp         \
+                  mtp_custom/MtpDeviceInfo.cpp          \
+                  mtp_custom/MtpObjectInfo.cpp          \
+                  mtp_custom/MtpPacket.cpp              \
+                  mtp_custom/MtpProperty.cpp            \
+                  mtp_custom/MtpRequestPacket.cpp       \
+                  mtp_custom/MtpResponsePacket.cpp      \
+                  mtp_custom/MtpStorageInfo.cpp         \
+                  mtp_custom/MtpStringBuffer.cpp        \
+                  mtp_custom/MtpStorage.cpp             \
+                  mtp_custom/MtpUtils.cpp               \
+
+LOCAL_CFLAGS :=  -DMTP_HOST \
+
+LOCAL_C_INCLUDES := \
+                    /home/kashimoto/jcrom_work/system/core/include/ \
+                    /home/kashimoto/jcrom_work/frameworks/native/include/ \
+                    /home/kashimoto/jcrom_work/frameworks/native/include/ \
+                    /home/kashimoto/jcrom_work/bionic/libc/kernel/common/ \
+
+#                    external/lib/libusbhost.so \
+#                    external/lib/libwvm.so \
+
+LOCAL_C_INCLUDES += $(call include-path-for, system-core)/cutils
+
+LOCAL_CFLAGS += -DHAVE_PTHREADS
+
+LOCAL_LDLIBS := -ldl -lGLESv1_CM -llog -lc  \
+                $(LOCAL_PATH)/Android/libutils.so         \
+                $(LOCAL_PATH)/Android/libcutils.so        \
+                $(LOCAL_PATH)/external/lib/libusbhost.so  \
+
+LOCAL_MODULE:= libmtpcustom
+    
+include $(BUILD_SHARED_LIBRARY)

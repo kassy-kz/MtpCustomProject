@@ -1,14 +1,20 @@
 package orz.kassy.mtpcustom;
 
+import java.util.ArrayList;
+
 import android.mtp.MtpDeviceInfo;
 import android.mtp.custom.MtpDevice;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +23,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnClickListener, RecognitionListener {
+
+	private SpeechRecognizer mSpeechRecognizer;
 
     private static final int OPTIONS_ITEM_ID_UP      = 0;
     private static final int OPTIONS_ITEM_ID_DOWN    = 1;
@@ -144,14 +152,41 @@ public class MainActivity extends Activity implements OnClickListener {
         btnApertureLeft.setOnClickListener(this);
         Button btnApertureRight = (Button) findViewById(R.id.buttonApertureRight);
         btnApertureRight.setOnClickListener(this);
+
+        // 音声認識準備
+        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+		mSpeechRecognizer.setRecognitionListener(this);
+
+        
     }
 
     
     @Override
     protected void onResume() {
         super.onResume();
+		startVoiceRecognition();
      ///   doMtpConnect();
     }
+    
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mSpeechRecognizer.cancel();
+	}
+
+	/**
+	 * 音声認識を開始する
+	 */
+	void startVoiceRecognition() {
+		Log.v("", "startListening");
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+		mSpeechRecognizer.startListening(intent);
+	}
+
     
     /**
      * OptionsMenu をクリックしたとき
@@ -186,41 +221,57 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.buttonSpeedLeft:
-			mShutterSpeed++;
-			if(mShutterSpeed > SHUTTER_SPEED_MAX){
-				mShutterSpeed = SHUTTER_SPEED_MAX;
-			}
-			doMtpSetShutterSpeed(mShutterSpeed);
-			Log.i(TAG,"shutter speed value = "+mShutterSpeed);
+			setHigherShutterSpeed();
 			break;
 		case R.id.buttonSpeedRight:
-			mShutterSpeed--;
-			if(mShutterSpeed < SHUTTER_SPEED_MIN){
-				mShutterSpeed = SHUTTER_SPEED_MIN;
-			}
-			doMtpSetShutterSpeed(mShutterSpeed);
-			Log.i(TAG,"shutter speed value = "+mShutterSpeed);
+			setLowerShutterSpeed();
 			break;
 			
 		case R.id.buttonApertureLeft:
-			mAperture++;
-			if(mAperture > APERTURE_MAX){
-				mAperture = APERTURE_MAX;
-			}
-			doMtpSetAperture(mAperture);
-			Log.i(TAG,"shutter speed value = "+mAperture);
+			setLargeAperture();
 			break;
 		case R.id.buttonApertureRight:
-			mAperture--;
-			if(mAperture < APERTURE_MIN){
-				mAperture = APERTURE_MIN;
-			}
-			doMtpSetAperture(mAperture);
-			Log.i(TAG,"shutter speed value = "+mAperture);
+			setSmallAperture();
 			break;
 			
 		}
 		
+	}
+
+	private void setSmallAperture() {
+		mAperture--;
+		if(mAperture < APERTURE_MIN){
+			mAperture = APERTURE_MIN;
+		}
+		doMtpSetAperture(mAperture);
+		Log.i(TAG,"shutter speed value = "+mAperture);
+	}
+
+	private void setLargeAperture() {
+		mAperture++;
+		if(mAperture > APERTURE_MAX){
+			mAperture = APERTURE_MAX;
+		}
+		doMtpSetAperture(mAperture);
+		Log.i(TAG,"shutter speed value = "+mAperture);
+	}
+
+	private void setLowerShutterSpeed() {
+		mShutterSpeed--;
+		if(mShutterSpeed < SHUTTER_SPEED_MIN){
+			mShutterSpeed = SHUTTER_SPEED_MIN;
+		}
+		doMtpSetShutterSpeed(mShutterSpeed);
+		Log.i(TAG,"shutter speed value = "+mShutterSpeed);
+	}
+
+	private void setHigherShutterSpeed() {
+		mShutterSpeed++;
+		if(mShutterSpeed > SHUTTER_SPEED_MAX){
+			mShutterSpeed = SHUTTER_SPEED_MAX;
+		}
+		doMtpSetShutterSpeed(mShutterSpeed);
+		Log.i(TAG,"shutter speed value = "+mShutterSpeed);
 	}
 
 	
@@ -233,5 +284,75 @@ public class MainActivity extends Activity implements OnClickListener {
 // kashimoto add start
     private native MtpDeviceInfo native_get_device_info2();
 // kashimoto add end
+
+	@Override
+	public void onBeginningOfSpeech() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBufferReceived(byte[] buffer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndOfSpeech() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(int error) {
+		// エラーの場合は再度音声認識を開始
+		startVoiceRecognition();
+		
+	}
+
+	@Override
+	public void onEvent(int eventType, Bundle params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPartialResults(Bundle partialResults) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReadyForSpeech(Bundle params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResults(Bundle results) {
+		// 音声認識が行われた場合にその結果が渡される
+		ArrayList<String> strings = results
+				.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+		Log.i("VoiceRec",strings.toString());
+		// 結果は文字列配列で渡されるので、その中にコマンドがあるか
+		if (strings.contains("絞れ")) {
+		    setLargeAperture();
+		} else if (strings.contains("開け")) {
+		    setSmallAperture();
+		} else if (strings.contains("速く")) {
+            setHigherShutterSpeed();
+        } else if (strings.contains("遅く")) {
+            setLowerShutterSpeed();
+        } else if (strings.contains("シャッター") || strings.contains("shutter")) {
+            doMtpShutter();
+		}
+		startVoiceRecognition();
+		
+	}
+
+	@Override
+	public void onRmsChanged(float rmsdB) {
+		// TODO Auto-generated method stub		
+	}
 
 }

@@ -78,9 +78,9 @@ public:
     bool                    closeSession();
 
     MtpDeviceInfo*          getDeviceInfo();
-    // kashimoto add start
+    // kassy add start
     MtpDeviceInfo*          doDeviceShutter();
-    // kashimoto add end
+    // kassy add end
 
     MtpStorageIDList*       getStorageIDs();
     MtpStorageInfo*         getStorageInfo(MtpStorageID storageID);
@@ -89,9 +89,10 @@ public:
     MtpObjectInfo*          getObjectInfo(MtpObjectHandle handle);
     void*                   getThumbnail(MtpObjectHandle handle, int& outLength);
     MtpObjectHandle         sendObjectInfo(MtpObjectInfo* info);
-//kashimoto add start
-    bool         setShutterSpeed(int value);
-//kashimoto add end
+//kassy add start
+    bool                    setShutterSpeed(int value);
+    bool                    setAperture(int value);
+//kassy add end
     bool                    sendObject(MtpObjectInfo* info, int srcFD);
     bool                    deleteObject(MtpObjectHandle handle);
     MtpObjectHandle         getParent(MtpObjectHandle handle);

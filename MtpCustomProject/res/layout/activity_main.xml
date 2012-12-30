@@ -1,16 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".MainActivity" />
+    android:layout_height="match_parent"
+    android:background="@drawable/total" >
 
     <Button
         android:id="@+id/button1"
@@ -23,28 +15,48 @@
         android:text="Button" />
 
     <Button
+        android:id="@+id/buttonShutter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shot_stateful" />
+
+    <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
-        android:layout_marginTop="14dp"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_toRightOf="@+id/button4"
         android:text="Button" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonSpeedLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
-        android:layout_alignLeft="@+id/button2"
-        android:text="Button" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="220dp"
+        android:background="@drawable/speed_left_stateful" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/buttonSpeedRight"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="64dp"
         android:text="Button" />
 
+    <Button
+        android:id="@+id/buttonSpeedRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonSpeedLeft"
+        android:layout_alignBottom="@+id/buttonSpeedLeft"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/buttonSpeedLeft"
+        android:background="@drawable/speed_right_stateful" />
+    
 </RelativeLayout>

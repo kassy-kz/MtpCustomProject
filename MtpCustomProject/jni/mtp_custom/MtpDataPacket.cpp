@@ -449,18 +449,41 @@ int MtpDataPacket::writeDataHeader(struct usb_request *request, uint32_t length)
 }
 
 int MtpDataPacket::write(struct usb_request *request) {
+	// kassy dirty start
+	 ALOGE("MtpDataPacket::write ");
+	// kassy dirty end
     MtpPacket::putUInt32(MTP_CONTAINER_LENGTH_OFFSET, mPacketSize);
     MtpPacket::putUInt16(MTP_CONTAINER_TYPE_OFFSET, MTP_CONTAINER_TYPE_DATA);
 
+    // kassy dirty start
+    ALOGD("usb_device_bulk_transfer 0-9 \n");
+    int i,j;
+    for (i=0;i<10;i++){
+        ALOGD("  write %d : %02x " , i, *( ((char *)(mBuffer)) + i));
+    }
+    ALOGD("usb_device_bulk_transfer 10-19 \n");
+    for (j=10; j<20; j++){
+        ALOGD("  write %d : %02x " , j, *( ((char *)(mBuffer)) + j));
+    }
+    ALOGD("\n");
+
+    // kassy dirty end
+
     // send header separately from data
     request->buffer = mBuffer;
-    request->buffer_length = MTP_CONTAINER_HEADER_SIZE;
+    //request->buffer_length = MTP_CONTAINER_HEADER_SIZE;
+    request->buffer_length = 24;
+    ALOGD("  transfer size 1 %d\n", request->buffer_length);
     int ret = transfer(request);
     if (ret == MTP_CONTAINER_HEADER_SIZE) {
+        ALOGD("  re-birth don \n");
         request->buffer = mBuffer + MTP_CONTAINER_HEADER_SIZE;
         request->buffer_length = mPacketSize - MTP_CONTAINER_HEADER_SIZE;
-        ret = transfer(request);
+        ALOGD("  transfer size 2 %d\n", request->buffer_length);
+       // ret = transfer(request);
+
     }
+    ALOGD("  retun \n");
     return (ret < 0 ? ret : 0);
 }
 

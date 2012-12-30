@@ -36,11 +36,11 @@ public final class MtpDevice {
 
     private final UsbDevice mDevice;
 
-    // kashimoto add start
+    // kassy add start
     static {
-        System.loadLibrary("mtpjnicustom");
+        System.loadLibrary("mtpcustom");
     }
-    // kashimoto add end
+    // kassy add end
     
     /**
      * MtpClient constructor
@@ -122,8 +122,7 @@ public final class MtpDevice {
         return native_get_device_info();
     }
 
-    // kashimoto dirty start
-    //public MtpDeviceInfo getDeviceInfo2() {
+    // kassy add start
     public MtpDeviceInfo doDeviceShutter() {
         return native_do_device_shutter();
     }
@@ -131,7 +130,11 @@ public final class MtpDevice {
     	Log.e("custom mtp","set shutter speed value = "+value);
         return native_set_shutter_speed(value);
     }
-    // kashimoto dirty end
+    public boolean setAperture(int value) {
+    	Log.e("custom mtp","set shutter speed value = "+value);
+        return native_set_aperture(value);
+    }
+    // kassy add end
 
     /**
      * Returns the list of IDs for all storage units on this device
@@ -258,10 +261,11 @@ public final class MtpDevice {
     private native boolean native_open(String deviceName, int fd);
     private native void native_close();
     private native MtpDeviceInfo native_get_device_info();
-// kashimoto add start
+// kassy add start
     private native MtpDeviceInfo native_do_device_shutter();
     private native boolean native_set_shutter_speed(int value);
-// kashimoto add end
+    private native boolean native_set_aperture(int value);
+// kassy add end
 
     private native int[] native_get_storage_ids();
     private native MtpStorageInfo native_get_storage_info(int storageId);

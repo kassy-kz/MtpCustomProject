@@ -319,7 +319,7 @@ MtpDeviceInfo* MtpDevice::getDeviceInfo() {
     return NULL;
 }
 
-// kashimoto add start
+// kassy add start
 MtpDeviceInfo* MtpDevice::doDeviceShutter() {
     Mutex::Autolock autoLock(mMutex);
 
@@ -336,7 +336,7 @@ MtpDeviceInfo* MtpDevice::doDeviceShutter() {
     }
     return NULL;
 }
-// kashimoto add end
+// kassy add end
 
 MtpStorageIDList* MtpDevice::getStorageIDs() {
     Mutex::Autolock autoLock(mMutex);
@@ -476,36 +476,50 @@ MtpObjectHandle MtpDevice::sendObjectInfo(MtpObjectInfo* info) {
     return (MtpObjectHandle)-1;
 }
 
-// kashimoto add start
+// kassy add start
 bool MtpDevice::setShutterSpeed(int value) {
-    ALOGD("native set shutter speed in");
     Mutex::Autolock autoLock(mMutex);
-    ALOGD("native set shutter speed value= %d ", value);
     mRequest.reset();
 
     mData.reset();
     mData.putUInt32(0x0000000c);
     mData.putUInt32(0x0000D102); // shutter speed dpc
-//    mData.putUInt32(0xff000000);
     mData.putUInt32(value);
-    ALOGD("native writeDataHeader");
-
-    // tmp add
     mRequest.setOperationCode(0x9110);
-    //if (sendData()) {
-    writeDataHeader(0x9110, 24);
-//    if (sendRequest(0x9110) && sendData()) {
-        ALOGD("native setShutterSpeed get response start");
+
+    sendRequest(0x9110);
+    sendData();
+    {
         MtpResponseCode ret = readResponse();
         if (ret == MTP_RESPONSE_OK) {
-            ALOGD("native setShutterSpeed get response ok");
             return true;
         }
-    //}
-    ALOGD("native setShutterSpeed get response no");
+    }
     return true;
 }
-// kashimoto add end
+
+bool MtpDevice::setAperture(int value) {
+    Mutex::Autolock autoLock(mMutex);
+    mRequest.reset();
+
+    mData.reset();
+    mData.putUInt32(0x0000000c);
+    mData.putUInt32(0x0000D101); // aperture dpc
+    mData.putUInt32(value);
+    mRequest.setOperationCode(0x9110);
+
+    sendRequest(0x9110);
+    sendData();
+    {
+        MtpResponseCode ret = readResponse();
+        if (ret == MTP_RESPONSE_OK) {
+            return true;
+        }
+    }
+    return true;
+}
+
+// kassy add end
 
 
 bool MtpDevice::sendObject(MtpObjectInfo* info, int srcFD) {

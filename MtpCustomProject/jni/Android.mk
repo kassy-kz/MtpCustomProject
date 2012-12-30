@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libmtpjnicustom
+LOCAL_MODULE := libmtpcustom
 
 LOCAL_SRC_FILES := \
                   mtp_custom/MtpDataPacket.cpp           \

@@ -88,7 +88,7 @@ static jfieldID field_objectInfo_keywords;
 
 
 
-// kashimoto add start
+// kassy add start
 extern int register_android_mtp_MtpDatabase(JNIEnv *env);
 extern int register_android_mtp_MtpDevice(JNIEnv *env);
 
@@ -123,7 +123,7 @@ bail:
     return result;
 }
 
-// kashimoto add end
+// kassy add end
 
 
 MtpDevice* get_device_from_object(JNIEnv* env, jobject javaDevice)
@@ -207,8 +207,7 @@ android_mtp_MtpDevice_get_device_info(JNIEnv *env, jobject thiz)
     return info;
 }
 
-// kashimoto add start
-
+// kassy add start
 static jboolean
 android_mtp_MtpDevice_set_shutter_speed(JNIEnv *env, jobject thiz, jint value){
     MtpDevice* device = get_device_from_object(env, thiz);
@@ -220,7 +219,19 @@ android_mtp_MtpDevice_set_shutter_speed(JNIEnv *env, jobject thiz, jint value){
 
     device->setShutterSpeed(value);
     return NULL;
+}
 
+static jboolean
+android_mtp_MtpDevice_set_aperture(JNIEnv *env, jobject thiz, jint value){
+    MtpDevice* device = get_device_from_object(env, thiz);
+    if (!device) {
+        ALOGD("android_mtp_MtpDevice_get_device_info device is null");
+        return NULL;
+    }
+    ALOGE("jni android_mtp_MtpDevice_set aperture value = %d", value);
+
+    device->setAperture(value);
+    return NULL;
 }
 
 static jobject
@@ -240,7 +251,7 @@ android_mtp_MtpDevice_do_device_shutter(JNIEnv *env, jobject thiz)
     env->NewObject(clazz_deviceInfo, constructor_deviceInfo);
     return NULL;
 }
-// kashimoto add end
+// kassy add end
 
 static jintArray
 android_mtp_MtpDevice_get_storage_ids(JNIEnv *env, jobject thiz)
@@ -485,12 +496,14 @@ static JNINativeMethod gMethods[] = {
     {"native_close",            "()V",  (void *)android_mtp_MtpDevice_close},
     {"native_get_device_info",  "()Landroid/mtp/MtpDeviceInfo;",
                                         (void *)android_mtp_MtpDevice_get_device_info},
-// kashimoto add start
+// kassy add start
     {"native_do_device_shutter",  "()Landroid/mtp/MtpDeviceInfo;",
                                         (void *)android_mtp_MtpDevice_do_device_shutter},
     {"native_set_shutter_speed",  "(I)Z",
                                         (void *)android_mtp_MtpDevice_set_shutter_speed},
-// kashimoto add end
+    {"native_set_aperture",  "(I)Z",
+                                        (void *)android_mtp_MtpDevice_set_aperture},
+// kassy add end
     {"native_get_storage_ids",  "()[I", (void *)android_mtp_MtpDevice_get_storage_ids},
     {"native_get_storage_info", "(I)Landroid/mtp/MtpStorageInfo;",
                                         (void *)android_mtp_MtpDevice_get_storage_info},

@@ -133,10 +133,6 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btn1 = (Button) findViewById(R.id.button1);
-        btn1.setOnClickListener(this);
-        Button btn2 = (Button) findViewById(R.id.button2);
-        btn2.setOnClickListener(this);
         Button btnShutter = (Button) findViewById(R.id.buttonShutter);
         btnShutter.setOnClickListener(this);
         Button btnSpeedLeft = (Button) findViewById(R.id.buttonSpeedLeft);
@@ -148,11 +144,14 @@ public class MainActivity extends Activity implements OnClickListener {
         btnApertureLeft.setOnClickListener(this);
         Button btnApertureRight = (Button) findViewById(R.id.buttonApertureRight);
         btnApertureRight.setOnClickListener(this);
-
-        Button btn4 = (Button) findViewById(R.id.button4);
-        btn4.setOnClickListener(this);
     }
 
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+     ///   doMtpConnect();
+    }
     
     /**
      * OptionsMenu をクリックしたとき
@@ -161,8 +160,10 @@ public class MainActivity extends Activity implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem menu){
         switch(menu.getItemId()){
             case OPTIONS_ITEM_ID_UP:
-               break;
+                doMtpConnect();
+                break;
             case OPTIONS_ITEM_ID_SHUTTER:
+                doMtpGetDeviceInfo();
                 break;
              default:
                 break;
@@ -170,28 +171,15 @@ public class MainActivity extends Activity implements OnClickListener {
         return false;
     }
 
-
-    
+    // ログとトースト両方出す
 	private void logToast(String str){
 	   Toast.makeText(this, str, Toast.LENGTH_LONG).show();
 	   Log.e(TAG,str);
 	}
 	
-//    static {
-//        System.loadLibrary("mtpcustom");
-//        System.loadLibrary("mtpjnicustom");
-//    }
-
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-		case R.id.button1:
-	        doMtpConnect();
-			break;
-
-		case R.id.button2:
-            doMtpGetDeviceInfo();
-			break;
 			
 		case R.id.buttonShutter:
 			doMtpShutter();
@@ -229,15 +217,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 			doMtpSetAperture(mAperture);
 			Log.i(TAG,"shutter speed value = "+mAperture);
-			break;
-			
-		case R.id.button4:
-			mShutterSpeed *= 2;
-			doMtpSetAperture(mShutterSpeed);
-			logToast("shutterSpeed = " + mShutterSpeed);
-			//func3();
-			//logToast("native func "+func1());
-			
 			break;
 			
 		}

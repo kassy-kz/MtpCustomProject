@@ -5,31 +5,12 @@
     android:background="@drawable/background" >
 
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="15dp"
-        android:text="Button" />
-
-    <Button
         android:id="@+id/buttonShutter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/shot_stateful" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toRightOf="@+id/button4"
-        android:text="Button" />
 
     <Button
         android:id="@+id/buttonApertureLeft"
@@ -67,13 +48,5 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/buttonSpeedLeft"
         android:background="@drawable/speed_right_stateful" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonApertureRight"
-        android:layout_alignLeft="@+id/buttonSpeedRight"
-        android:text="Button" />
     
 </RelativeLayout>

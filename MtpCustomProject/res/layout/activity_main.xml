@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/total" >
+    android:background="@drawable/background" >
 
     <Button
         android:id="@+id/button1"
@@ -32,6 +32,24 @@
         android:text="Button" />
 
     <Button
+        android:id="@+id/buttonApertureLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="65dp"
+        android:background="@drawable/aperture_left_stateful" />
+    <Button
+        android:id="@+id/buttonApertureRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonApertureLeft"
+        android:layout_alignBottom="@+id/buttonApertureLeft"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/buttonApertureLeft"
+        android:background="@drawable/aperture_right_stateful" />
+    
+    <Button
         android:id="@+id/buttonSpeedLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,15 +57,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="220dp"
         android:background="@drawable/speed_left_stateful" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/buttonSpeedRight"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="64dp"
-        android:text="Button" />
 
     <Button
         android:id="@+id/buttonSpeedRight"
@@ -58,5 +67,13 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/buttonSpeedLeft"
         android:background="@drawable/speed_right_stateful" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonApertureRight"
+        android:layout_alignLeft="@+id/buttonSpeedRight"
+        android:text="Button" />
     
 </RelativeLayout>

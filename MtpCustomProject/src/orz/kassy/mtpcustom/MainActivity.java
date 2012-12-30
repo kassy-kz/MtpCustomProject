@@ -26,6 +26,8 @@ public class MainActivity extends Activity implements OnClickListener {
     private static final String TAG = null;
 	private static final int SHUTTER_SPEED_MAX = 156;
 	private static final int SHUTTER_SPEED_MIN = 0;
+	private static final int APERTURE_MAX = 156;
+	private static final int APERTURE_MIN = 0;
     private int mTmpInt = 1;
 
     private UsbManager mManager;
@@ -42,7 +44,7 @@ public class MainActivity extends Activity implements OnClickListener {
     //      0x0000 000f => 10"
 	//      0xff00 0000 => bulb (MIN)
 	private int mShutterSpeed = 0x0000000f;
-	private int mAperture     = 0x0000000f;
+	private int mAperture     = 0x00000045;
 	
     /**
      * MTPデバイスへの接続を行う
@@ -95,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	/**
 	 * （独自追加APIで）シャッタースピードを変更する
-	 * @param value　シャッタースピード値（対応値はまだ勘頼みです... ）
+	 * @param value　シャッタースピード値
 	 */
 	private void doMtpSetShutterSpeed(int value) {
 		mMtpDevice.setShutterSpeed(value);
@@ -103,9 +105,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	/**
 	 * （独自追加APIで）絞りを変更する
-	 * @param value　絞り値（対応値はまだ勘頼みです... ）
+	 * @param value　絞り値
 	 */
-	private void doMtpAperture(int value) {
+	private void doMtpSetAperture(int value) {
 		mMtpDevice.setAperture(value);
 	}
 
@@ -141,6 +143,11 @@ public class MainActivity extends Activity implements OnClickListener {
         btnSpeedLeft.setOnClickListener(this);
         Button btnSpeedRight = (Button) findViewById(R.id.buttonSpeedRight);
         btnSpeedRight.setOnClickListener(this);
+
+        Button btnApertureLeft = (Button) findViewById(R.id.buttonApertureLeft);
+        btnApertureLeft.setOnClickListener(this);
+        Button btnApertureRight = (Button) findViewById(R.id.buttonApertureRight);
+        btnApertureRight.setOnClickListener(this);
 
         Button btn4 = (Button) findViewById(R.id.button4);
         btn4.setOnClickListener(this);
@@ -207,9 +214,26 @@ public class MainActivity extends Activity implements OnClickListener {
 			Log.i(TAG,"shutter speed value = "+mShutterSpeed);
 			break;
 			
+		case R.id.buttonApertureLeft:
+			mAperture++;
+			if(mAperture > APERTURE_MAX){
+				mAperture = APERTURE_MAX;
+			}
+			doMtpSetAperture(mAperture);
+			Log.i(TAG,"shutter speed value = "+mAperture);
+			break;
+		case R.id.buttonApertureRight:
+			mAperture--;
+			if(mAperture < APERTURE_MIN){
+				mAperture = APERTURE_MIN;
+			}
+			doMtpSetAperture(mAperture);
+			Log.i(TAG,"shutter speed value = "+mAperture);
+			break;
+			
 		case R.id.button4:
 			mShutterSpeed *= 2;
-			doMtpSetShutterSpeed(mShutterSpeed);
+			doMtpSetAperture(mShutterSpeed);
 			logToast("shutterSpeed = " + mShutterSpeed);
 			//func3();
 			//logToast("native func "+func1());
